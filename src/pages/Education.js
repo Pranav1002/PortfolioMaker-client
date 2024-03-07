@@ -15,7 +15,7 @@ export default function Education() {
   const [field, setField] = useState("");
   const [grade, setGrade] = useState("");
   const [educations, setEducations] = useState([]);
-
+  const [reload , setreload] = useState("new");
   const [toggleModal, setToggleModal] = useState(true);
 
   // useEffect(() => {
@@ -51,9 +51,11 @@ export default function Education() {
         )
         .catch((error) => console.error("Error fetching educations:", error));
     }
-  },[navigate]);
+  },[navigate , reload]);
   
-
+  const reloadEducation = () => {
+    setreload(reload + "a");
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("in u");
@@ -112,6 +114,7 @@ export default function Education() {
           navigate("/education");
           console.info("Education Added");
                 setToggleModal(true);
+                setreload("change");
       } else {
         console.error("Login failed");
       }
@@ -144,6 +147,7 @@ export default function Education() {
             degree={education.degree}
             field={education.field}
             grade={education.grade}
+            reloadEducation={reloadEducation}
           />
         ))} 
       </ul>

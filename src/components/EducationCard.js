@@ -3,6 +3,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 import { IconContext } from "react-icons";
 import { ReactSession } from "react-client-session";
+import { useNavigate } from "react-router-dom";
 
 export default function EducationCard(props) {
   const user = ReactSession.get("user");
@@ -15,9 +16,10 @@ export default function EducationCard(props) {
   const [field, setField] = useState(props.field);
   const [grade, setGrade] = useState(props.grade);
 
+  let navigate = useNavigate();
+
+
   const handleDelete = async (id) => {
-
-
 
     try {
         console.log("id of education for delete" , props.id);
@@ -29,13 +31,12 @@ export default function EducationCard(props) {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-      });
-      if (response.ok) {
-        // const responseData = await response.json();
-        // console.log("Data:", responseData);
-          // ReactSession.set("user", responseData);
-          // navigate("/education");
+      })
+      if (response.ok) 
+      {
           console.info("Education deleted");
+          props.reloadEducation();
+          ReactSession.set("reload" , "delete");
                 // setToggleModal(true);
       } else {
         console.error("Login failed");
@@ -43,23 +44,6 @@ export default function EducationCard(props) {
     } catch (error) {
       console.error("Error during login:", error);
     }
-  
-    // console.log(typeof(Number(id)));
-    // const parsedId=Number(id)
-    // console.log("id of education for delete" , props.id);
-    // fetch(`http://localhost:8384/api/educations/delete/${parsedId}`, {
-    //   method: "DELETE",
-    //   crossDomain: true,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Accept: "application/json",
-    //     "Access-Control-Allow-Origin": "*",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     alert("Deleted Successfully.");
-    //   });
   };
 
   const handleUpdate = async (e) => {
@@ -90,36 +74,18 @@ export default function EducationCard(props) {
     if (response.ok) {
       const responseData = await response.json();
               console.log("update data" , responseData);
+              // navigate("/education");
+              // navigate("/education");
+              props.reloadEducation();
+          ReactSession.set("reload" , "update");
+
+              
     } else {
       console.error("Login failed");
     }
   } catch (error) {
     console.error("Error during login:", error);
   }
-
-    // fetch(`http://localhost:8384/api/educations/update/${props.id}`, {
-    //   method: "PUT",
-    //   crossDomain: true,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Accept: "application/json",
-    //     "Access-Control-Allow-Origin": "*",
-    //   },
-    //   body: JSON.stringify({
-        
-    //     institute: institute,
-    //     degree: degree,
-    //     field: field,
-    //     grade: grade,
-    //     user: {
-    //       userId:user.id,
-    //     }
-    //   }),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     console.log("update data" , data);
-    //   });
   };
 
   return (

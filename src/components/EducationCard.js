@@ -16,7 +16,7 @@ export default function EducationCard(props) {
   const [field, setField] = useState(props.field);
   const [grade, setGrade] = useState(props.grade);
 
-  let navigate = useNavigate();
+
 
 
   const handleDelete = async (id) => {
@@ -74,11 +74,8 @@ export default function EducationCard(props) {
     if (response.ok) {
       const responseData = await response.json();
               console.log("update data" , responseData);
-              // navigate("/education");
-              // navigate("/education");
               props.reloadEducation();
-          ReactSession.set("reload" , "update");
-
+              ReactSession.set("reload" , "update");
               
     } else {
       console.error("Login failed");

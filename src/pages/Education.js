@@ -18,22 +18,6 @@ export default function Education() {
   const [reload , setreload] = useState("new");
   const [toggleModal, setToggleModal] = useState(true);
 
-  // useEffect(() => {
-  //   // const user = ReactSession.get("user");
-  //   if (!user) {
-  //     navigate("/login");
-  //   }
-  
-
- 
-  //   console.log("user id" , user.userId);
-  //   fetch(
-  //     "http://localhost:8384/api/educations/" + user.userId
-  //   )
-  //     .then((res) => res.json())
-  //     .then((data) => setEducations(data));
-  // } , [navigate,user]);
-
   useEffect(() => {
     const user = ReactSession.get("user");
     if (!user) {
@@ -56,38 +40,10 @@ export default function Education() {
   const reloadEducation = () => {
     setreload(reload + "a");
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("in u");
-    // fetch("http://localhost:8384/api/educations", {
-    //   method: "POST",
-    //   crossDomain: true,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Accept: "application/json",
-    //     "Access-Control-Allow-Origin": "*",
-    //   },
-    //   body: JSON.stringify({
-    //     institute: institute,
-    //     degree: degree,
-    //     field: field,
-    //     grade: parseFloat(grade),
-    //     user : {
-    //       userId : user.userId
-    //     }
-    //   }),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     console.log("after url") ;
-    //     if (data.status === 400) {
-    //       console.error("Error Occured");
-    //     } else {
-    //       console.info("Education Added");
-    //       setToggleModal(true);
-    //       navigate("/education");
-    //     }
-    //   });
     try {
       const apiUrl = "http://localhost:8384/api/educations";
       // console.log("Data before email:", email, "and password:", password);
@@ -110,8 +66,7 @@ export default function Education() {
       if (response.ok) {
         const responseData = await response.json();
         console.log("Data:", responseData);
-          // ReactSession.set("user", responseData);
-          navigate("/education");
+          // navigate("/education");
           console.info("Education Added");
                 setToggleModal(true);
                 setreload("change");
@@ -139,9 +94,9 @@ export default function Education() {
       </div>
       <hr className="my-2" />
       <ul className="flex flex-col">
-         {educations.map((education) => (
+         {educations.slice().reverse().map((education) => (
           <EducationCard
-            key={education.id}
+            key={education.eduId}
             id={education.eduId}
             institute={education.institute}
             degree={education.degree}

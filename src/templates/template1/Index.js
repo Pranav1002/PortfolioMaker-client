@@ -21,14 +21,15 @@ export default function Index() {
   const [projects, setProjects] = useState([]);
 
   const getUser = (userId) => {
-    fetch(`https://localhost:7054/api/Users/${userId}`)
+    console.log(userId)
+    fetch(`http://localhost:8384/api/users/${userId}`)
       .then((res) => res.json())
       .then((data) => setUser(data));
   };
 
   const getEducations = (userId) => {
     fetch(
-      `https://localhost:7054/api/Educations/GetEducationsByUserId/${userId}`
+      `http://localhost:8384/api/educations/get/${userId}`
     )
       .then((res) => res.json())
       .then((data) => setEducations(data));
@@ -36,20 +37,21 @@ export default function Index() {
 
   const getExperiences = (userId) => {
     fetch(
-      `https://localhost:7054/api/Experiences/GetExperiencesByUserId/${userId}`
+      `http://localhost:8384/api/experiences/get/${userId}`
     )
       .then((res) => res.json())
       .then((data) => setExperiences(data));
   };
 
   const getProjects = (userId) => {
-    fetch(`https://localhost:7054/api/Projects/GetProjectsByUserId/${userId}`)
+    fetch(`http://localhost:8384/api/projects/get/${userId}`)
       .then((res) => res.json())
       .then((data) => setProjects(data));
   };
 
-  const getProfile = (profileId) => {
-    fetch(`https://localhost:7054/api/Profile/GetProfile/${profileId}`)
+  const getProfile = (userId) => {
+    console.log(userId)
+    fetch(`http://localhost:8384/api/profiles/get/${userId}`)
       .then((res) => res.json())
       .then((data) => setProfile(data));
   };
@@ -58,7 +60,7 @@ export default function Index() {
     let profileId = params.id;
     let userId = profileId.split("-")[2];
 
-    getProfile(profileId);
+    getProfile(userId);
     getUser(userId);
     getEducations(userId);
     getExperiences(userId);
@@ -96,7 +98,7 @@ export default function Index() {
                 {/* Social Links */}
                 <div className="mx-2 flex gap-2">
                   {user.githubProfile !== "" && (
-                    <a href={user.githubProfile} target="_blank">
+                    <a href={user.linkedInProfile} target="_blank">
                       <IconContext.Provider
                         value={{
                           className: "shared-className",
@@ -109,7 +111,7 @@ export default function Index() {
                   )}
 
                   {user.linkedInProfile !== "" && (
-                    <a href={user.linkedInProfile} target="_blank">
+                    <a href={user.githubProfile} target="_blank">
                       <IconContext.Provider
                         value={{
                           className: "shared-className",
@@ -210,8 +212,10 @@ export default function Index() {
                   <ExperienceDetails
                     key={experience.id}
                     role={experience.role}
-                    startDate={experience.startDate}
-                    endDate={experience.endDate}
+                    startMonth={experience.startMonth}
+                    endMonth={experience.endMonth}
+                    startYear={experience.startYear}
+                    endYear={experience.endYear}
                     companyName={experience.companyName}
                     description={experience.description}
                   />

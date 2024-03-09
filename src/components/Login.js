@@ -14,7 +14,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const apiUrl = "http://localhost:8384/api/users/login";
-      console.log("Data before email:", email, "and password:", password);
+      console.log("Data before login \n email:", email, "and password:", password);
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -25,7 +25,7 @@ export default function Login() {
       });
       if (response.ok) {
         const responseData = await response.json();
-        console.log("Data:", responseData);
+        console.log("after login \n Data: ", responseData);
           ReactSession.set("user", responseData);
          navigate("/");
         // Handle successful login here, e.g., redirect to another page

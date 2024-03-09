@@ -15,6 +15,8 @@ export default function Home() {
       return; // Return early to prevent further execution
     } 
     const profileId = `${user.firstName}-${user.lastName }-${user.userId}`;
+
+    console.log(profileId)
     
     fetch(`http://localhost:8384/api/profiles/get/${user.userId}`)
       .then((res) => {
@@ -42,7 +44,7 @@ export default function Home() {
   };
 
   const handleUpdate = (newProfile) => {
-    fetch(`http://localhost:8384/api/profiles/${newProfile.id}`, {
+    fetch(`http://localhost:8384/api/profiles/update/${newProfile.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

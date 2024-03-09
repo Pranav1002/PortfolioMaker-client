@@ -10,7 +10,7 @@ export default function ExperienceDetails(props) {
             <i className="bx bxs-right-arrow hidden text-primary md:block"></i>
             <div className="md:-mt-1 md:pl-8">
               <span className="block font-body font-bold text-gray-400">
-                {props.startDate} - {props.endDate}
+                {props.startMonth+" "+props.startYear} - {props.endMonth+" "+props.endYear}
               </span>
               <span className="block pt-2 font-header text-xl font-bold uppercase text-primary">
                 {props.companyName} - {props.role}

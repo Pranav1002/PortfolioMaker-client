@@ -17,40 +17,6 @@ export default function Register() {
 
   const [statusError, setStatusError] = useState("");
 
-  const generatePublicProfile = (user) => {
-    var profileId =
-      user.firstName.toLowerCase() +
-      "-" +
-      user.lastName.toLowerCase() +
-      "-" +
-      user.id;
-    var defaultStatus = "Private";
-    var defaultTemplate = "Classic";
-
-    fetch("https://localhost:7054/api/Profile/PostProfile", {
-      method: "POST",
-      crossDomain: true,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({
-        id: profileId,
-        userId: user.id,
-        status: defaultStatus,
-        template: defaultTemplate,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === 400) {
-          setStatusError("Error Occured while Generating Public Profile");
-        } else {
-          setStatusError("");
-        }
-      });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();

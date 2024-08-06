@@ -20,57 +20,57 @@ export default function Index() {
   const [experiences, setExperiences] = useState([]);
   const [projects, setProjects] = useState([]);
 
+  const fetchData = async (url, setData) => {
+    try {
+      const response = await fetch(url);
+      const text = await response.text();
+      console.log("Raw response:", text);
+      const data = text ? JSON.parse(text) : {};
+      setData(data);
+    } catch (error) {
+      console.error(`Error fetching data from ${url}:`, error);
+    }
+  };
+
   const getUser = (userId) => {
-    console.log(userId)
-    fetch(`http://localhost:8384/api/users/${userId}`)
-      .then((res) => res.json())
-      .then((data) => setUser(data));
+    fetchData(`http://localhost:8384/api/users/${userId}`, setUser);
   };
 
   const getEducations = (userId) => {
-    fetch(
-      `http://localhost:8384/api/educations/get/${userId}`
-    )
-      .then((res) => res.json())
-      .then((data) => setEducations(data));
+    fetchData(`http://localhost:8384/api/educations/get/${userId}`, setEducations);
   };
 
   const getExperiences = (userId) => {
-    fetch(
-      `http://localhost:8384/api/experiences/get/${userId}`
-    )
-      .then((res) => res.json())
-      .then((data) => setExperiences(data));
+    fetchData(`http://localhost:8384/api/experiences/get/${userId}`, setExperiences);
   };
 
   const getProjects = (userId) => {
-    fetch(`http://localhost:8384/api/projects/get/${userId}`)
-      .then((res) => res.json())
-      .then((data) => setProjects(data));
+    fetchData(`http://localhost:8384/api/projects/get/${userId}`, setProjects);
   };
 
   const getProfile = (userId) => {
-    console.log(userId)
-    fetch(`http://localhost:8384/api/profiles/get/${userId}`)
-      .then((res) => res.json())
-      .then((data) => setProfile(data));
+    fetchData(`http://localhost:8384/api/profiles/get/${userId}`, setProfile);
   };
 
   useEffect(() => {
     let profileId = params.id;
     let userId = profileId.split("-")[2];
 
+    console.log("Profile id: ",profileId);
+    
+    console.log(userId);
     getProfile(userId);
     getUser(userId);
     getEducations(userId);
     getExperiences(userId);
     getProjects(userId);
-  }, []);
+  }, [params.id]);
 
   if (!user) {
     return <p>Loading...</p>;
   }
 
+  console.log(profile)
   if (profile && profile.status !== "Public") {
     return <p>Sorry, profile is private</p>;
   }
@@ -98,7 +98,7 @@ export default function Index() {
                 {/* Social Links */}
                 <div className="mx-2 flex gap-2">
                   {user.githubProfile !== "" && (
-                    <a href={user.linkedInProfile} target="_blank">
+                    <a href={user.linkedInProfile} target="_blank" rel="noopener noreferrer">
                       <IconContext.Provider
                         value={{
                           className: "shared-className",
@@ -111,7 +111,7 @@ export default function Index() {
                   )}
 
                   {user.linkedInProfile !== "" && (
-                    <a href={user.githubProfile} target="_blank">
+                    <a href={user.githubProfile} target="_blank" rel="noopener noreferrer">
                       <IconContext.Provider
                         value={{
                           className: "shared-className",

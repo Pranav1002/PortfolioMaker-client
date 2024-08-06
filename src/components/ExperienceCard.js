@@ -28,6 +28,7 @@ console.log("props :" , props);
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          "Authorization": `Bearer ${user.accessToken}`
         }
       });
       if (response.ok) {
@@ -57,6 +58,7 @@ console.log("props :" , props);
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        "Authorization": `Bearer ${user.accessToken}`
       },
       body: JSON.stringify({
         

@@ -26,6 +26,7 @@ export default function ProjectCard(props) {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          "Authorization": `Bearer ${user.accessToken}`
         }
       });
       if (response.ok) {
@@ -54,6 +55,7 @@ export default function ProjectCard(props) {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        "Authorization": `Bearer ${user.accessToken}`
       },
       body: JSON.stringify({
         

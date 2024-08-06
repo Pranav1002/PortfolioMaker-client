@@ -13,7 +13,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const apiUrl = "http://localhost:8384/api/users/login";
+      const apiUrl = "http://localhost:8384/api/v1/auth/login";
       console.log("Data before login \n email:", email, "and password:", password);
       const response = await fetch(apiUrl, {
         method: "POST",

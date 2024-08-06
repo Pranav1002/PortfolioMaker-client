@@ -18,8 +18,7 @@ export default function Projects() {
   const [githubUrl, setGithubUrl] = useState("");
   const [live, setLive] = useState("");
   const [projects, setProjects] = useState([]);
-  const [reload , setReload] = useState("new");
-
+  const [reload, setReload] = useState("new");
 
   const [toggleModal, setToggleModal] = useState(true);
 
@@ -29,18 +28,22 @@ export default function Projects() {
       navigate("/login");
     } else {
       console.log("user id", user.userId);
-      fetch(`http://localhost:8384/api/projects/get/${user.userId}`)
+      fetch(`http://localhost:8384/api/projects/get/${user.userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
         .then((res) => res.json())
-        .then((data) => 
-        {
+        .then((data) => {
           console.log(projects);
           console.log(data);
-          setProjects(data)
-        }
-        )
-        .catch((error) => console.error("Error fetching :", error));
+          setProjects(data);
+        })
+        .catch((error) => console.error("Error fetching:", error));
     }
-  },[navigate, reload]);
+  }, [navigate, reload]);
 
   const reloadProject = () => {
     setReload(reload + "a");
@@ -50,39 +53,37 @@ export default function Projects() {
     e.preventDefault();
 
     try {
-
       const apiUrl = "http://localhost:8384/api/projects";
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          "Authorization": `Bearer ${user.accessToken}`, // Add the JWT token to the headers
         },
-        body: JSON.stringify({ 
-              title:title,
-              description:description,
-              month:month,
-              year:year,
-              githubUrl:githubUrl,
-              liveUrl:live,
-              user : {
-                userId : user.userId
-              }
-         }),
+        body: JSON.stringify({
+          title: title,
+          description: description,
+          month: month,
+          year: year,
+          githubUrl: githubUrl,
+          liveUrl: live,
+          user: {
+            userId: user.userId,
+          },
+        }),
       });
       if (response.ok) {
         const responseData = await response.json();
         console.log("Data: exp", responseData);
-          // ReactSession.set("user", responseData);
-          // navigate("/project");
-          console.info("Project Added");
-          setToggleModal(true);
-          setReload("change")
+        console.info("Project Added");
+        setToggleModal(true);
+        setReload("change");
       } else {
-        console.error("Login failed");
+        console.error("Failed to add project");
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during project addition:", error);
     }
   };
 
@@ -191,7 +192,7 @@ export default function Projects() {
                       value={month}
                     >
                       <option value="">--Select Month--</option>
-                      <option value="Janaury">Janaury</option>
+                      <option value="January">January</option>
                       <option value="February">February</option>
                       <option value="March">March</option>
                       <option value="April">April</option>

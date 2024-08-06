@@ -15,7 +15,7 @@ export default function Education() {
   const [field, setField] = useState("");
   const [grade, setGrade] = useState("");
   const [educations, setEducations] = useState([]);
-  const [reload , setreload] = useState("new");
+  const [reload, setReload] = useState("new");
   const [toggleModal, setToggleModal] = useState(true);
 
   useEffect(() => {
@@ -24,21 +24,34 @@ export default function Education() {
       navigate("/login");
     } else {
       console.log("user id for fetch education of that user \n", user.userId);
-      fetch(`http://localhost:8384/api/educations/get/${user.userId}`)
-        .then((res) => res.json())
-        .then((data) => 
-        {
-          // console.log(educations);
-          console.log("all educations" , data);
-          setEducations(data);
+
+      const fetchEducations = async () => {
+        try {
+          const response = await fetch(`http://localhost:8384/api/educations/get/${user.userId}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+          });
+          if (response.ok) {
+            const data = await response.json();
+            console.log("all educations", data);
+            setEducations(data);
+          } else {
+            console.error("Failed to fetch educations");
+          }
+        } catch (error) {
+          console.error("Error fetching educations:", error);
         }
-        )
-        .catch((error) => console.error("Error fetching educations:", error));
+      };
+
+      fetchEducations();
     }
-  },[navigate , reload]);
-  
+  }, [navigate, reload]);
+
   const reloadEducation = () => {
-    setreload(reload + "a");
+    setReload(reload + "a");
   };
 
   const handleSubmit = async (e) => {
@@ -46,37 +59,35 @@ export default function Education() {
     console.log("in u");
     try {
       const apiUrl = "http://localhost:8384/api/educations";
-      // console.log("Data before email:", email, "and password:", password);
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          "Authorization": `Bearer ${user.accessToken}`, // Add the JWT token to the headers
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           institute: institute,
-              degree: degree,
-              field: field,
-              grade: parseFloat(grade),
-              user : {
-                userId : user.userId
-              }
-         }),
+          degree: degree,
+          field: field,
+          grade: parseFloat(grade),
+          user: {
+            userId: user.userId,
+          },
+        }),
       });
       if (response.ok) {
         const responseData = await response.json();
         console.log("Data:", responseData);
-          // navigate("/education");
-          console.info("Education Added");
-                setToggleModal(true);
-                setreload("change");
+        console.info("Education Added");
+        setToggleModal(true);
+        setReload("change");
       } else {
-        console.error("Login failed");
+        console.error("Failed to add education");
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during education addition:", error);
     }
-    
   };
 
   return (
@@ -94,7 +105,7 @@ export default function Education() {
       </div>
       <hr className="my-2" />
       <ul className="flex flex-col">
-         {educations.slice().reverse().map((education) => (
+        {educations.slice().reverse().map((education) => (
           <EducationCard
             key={education.eduId}
             id={education.eduId}
@@ -104,7 +115,7 @@ export default function Education() {
             grade={education.grade}
             reloadEducation={reloadEducation}
           />
-        ))} 
+        ))}
       </ul>
 
       {/* <!-- Main modal --> */}
@@ -152,7 +163,6 @@ export default function Education() {
                     type="text"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 "
                     required
-                    autoComplete="email"
                     value={institute}
                     onChange={(e) => setInstitute(e.target.value)}
                   />

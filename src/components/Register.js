@@ -11,6 +11,7 @@ export default function Register() {
   const [gender, setGender] = useState("Male");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [accessToken, setAccessToken] = useState("");
   const [about, setAbout] = useState("");
   const [githubUrl, setGithubUrl] = useState("");
   const [linkedInUrl, setLinkedInUrl] = useState("");
@@ -29,7 +30,7 @@ export default function Register() {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({ email:email, password:password, firstName:firstName, lastName:lastName, about:about, gender:gender, githubProfile:githubUrl, linkedInProfile:linkedInUrl }),
+        body: JSON.stringify({accessToken:accessToken ,email:email, password:password, firstName:firstName, lastName:lastName, about:about, gender:gender, githubProfile:githubUrl, linkedInProfile:linkedInUrl }),
       });
       if (response.ok) {
         const responseData = await response.json();

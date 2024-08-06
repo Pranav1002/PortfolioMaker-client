@@ -17,38 +17,52 @@ export default function Experiences() {
   const [startYear, setStartYear] = useState("");
   const [endMonth, setEndMonth] = useState("");
   const [endYear, setEndYear] = useState("");
-  const [reload , setreload] = useState("new");
+  const [reload, setReload] = useState("new");
   const [experiences, setExperiences] = useState([]);
 
   const [toggleModal, setToggleModal] = useState(true);
 
-
   useEffect(() => {
     const user = ReactSession.get("user");
+    console.log("User from session:", user); // Log the user object
+
     if (!user) {
       navigate("/login");
     } else {
       console.log("user id for fetch experiences", user.userId);
-      fetch(`http://localhost:8384/api/experiences/get/${user.userId}`)
-        .then((res) => res.json())
-        .then((data) => 
-        {
-          // console.log(experiences);
-          console.log("data of all experiances" , data);
-          setExperiences(data)
+
+      const fetchExperiences = async () => {
+        try {
+          const response = await fetch(`http://localhost:8384/api/experiences/get/${user.userId}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+          });
+          if (response.ok) {
+            const data = await response.json();
+            console.log("data of all experiences", data);
+            setExperiences(data);
+          } else {
+            console.error("Failed to fetch experiences");
+          }
+        } catch (error) {
+          console.error("Error fetching experiences:", error);
         }
-        )
-        .catch((error) => console.error("Error fetching :", error));
+      };
+
+      fetchExperiences();
     }
-  },[navigate, reload]);
+  }, [navigate, reload]);
 
   const reloadExperience = () => {
-    setreload(reload + "a");
+    setReload(reload + "a");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("in u");
+    console.log("in handleSubmit");
     try {
       const apiUrl = "http://localhost:8384/api/experiences";
       const response = await fetch(apiUrl, {
@@ -56,35 +70,35 @@ export default function Experiences() {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          "Authorization": `Bearer ${user.accessToken}`, // Add the JWT token to the headers
         },
-        body: JSON.stringify({ 
-              companyName:companyName,
-              role:role,
-              description:description,
-              startMonth:startMonth,
-              endMonth:endMonth,
-              startYear:startYear,
-              endYear:endYear,
-              user : {
-                userId : user.userId
-              }
-         }),
+        body: JSON.stringify({
+          companyName: companyName,
+          role: role,
+          description: description,
+          startMonth: startMonth,
+          endMonth: endMonth,
+          startYear: startYear,
+          endYear: endYear,
+          user: {
+            userId: user.userId,
+          },
+        }),
       });
       if (response.ok) {
         const responseData = await response.json();
         console.log("Data:", responseData);
-          // ReactSession.set("user", responseData);
-          // navigate("/experiences");
-          console.info("Experience Added");
-                setToggleModal(true);
-                setreload("change");
+        console.info("Experience Added");
+        setToggleModal(true);
+        setReload("change");
       } else {
-        console.error("Login failed");
+        console.error("Failed to add experience");
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during experience addition:", error);
     }
   };
+
   return (
     <>
       <div className="flex justify-between items-center">
@@ -100,7 +114,7 @@ export default function Experiences() {
       </div>
       <hr className="my-2" />
       <ul className="flex flex-col">
-        { experiences.slice().reverse().map((experience) => (
+        {experiences.slice().reverse().map((experience) => (
           <ExperienceCard
             key={experience.expId}
             id={experience.expId}
@@ -161,7 +175,6 @@ export default function Experiences() {
                     type="text"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 "
                     required
-                    autoComplete="email"
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
                   />
@@ -175,7 +188,6 @@ export default function Experiences() {
                     type="text"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 "
                     required
-                    autoComplete="email"
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
                   />
@@ -204,7 +216,7 @@ export default function Experiences() {
                       value={startMonth}
                     >
                       <option value="">--Select Month--</option>
-                      <option value="Janaury">Janaury</option>
+                      <option value="January">January</option>
                       <option value="February">February</option>
                       <option value="March">March</option>
                       <option value="April">April</option>
@@ -251,7 +263,7 @@ export default function Experiences() {
                       value={endMonth}
                     >
                       <option value="">--Select Month--</option>
-                      <option value="Janaury">Janaury</option>
+                      <option value="January">January</option>
                       <option value="February">February</option>
                       <option value="March">March</option>
                       <option value="April">April</option>

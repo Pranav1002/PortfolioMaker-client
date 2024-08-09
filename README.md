@@ -35,7 +35,7 @@ To run the PortfolioMaker project on your local machine, follow these steps:
 5. Install backend dependencies: Navigate to the backend directory and use Maven or Gradle to manage dependencies. For Maven, run mvn install.
 6. Set up the MySQL database: Create a MySQL database and configure the backend to connect to it. Update the database connection details in the backend’s application.properties file.
 7. Start the frontend development server: Run npm start to launch the frontend application.
-8. Start the backend server: Navigate to the backend directory and use Maven to run the Spring Boot application. use command mvn spring-boot:run.
+8. Start the backend server: Navigate to the backend directory and use Maven to run the Spring Boot application. Use command mvn spring-boot:run.
 9. Open your web browser and access the application: Visit the appropriate URL to view and interact with the application.
 
 ## Contributor

@@ -28,14 +28,15 @@ The PortfolioMaker project is built using the following technologies:
 
 To run the PortfolioMaker project on your local machine, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/PortfolioMaker.git`
-2. Navigate to the project directory: `cd PortfolioMaker`
-3. Install frontend dependencies: `npm install`
-4. Install backend dependencies (Spring Boot): Dependencies are managed using Maven or Gradle. Please refer to the backend project documentation for installation instructions.
-5. Set up the MySQL database. Ensure that your backend is configured to connect to the database.
-6. Start the frontend development server: `npm start`
-7. Start the backend server: Refer to the backend project documentation for instructions on running the Spring Boot application.
-8. Open your web browser and access the application.
+1. Clone the repository: git clone https://github.com/PortfolioMaker-client.git
+2. Clone the repository: git clone https://github.com/PortfolioMaker-api.git
+3. Navigate to the project directory: cd JobBoard
+4. Install frontend dependencies: npm install
+5. Install backend dependencies: Navigate to the backend directory and use Maven or Gradle to manage dependencies. For Maven, run mvn install.
+6. Set up the MySQL database: Create a MySQL database and configure the backend to connect to it. Update the database connection details in the backend’s application.properties file.
+7. Start the frontend development server: Run npm start to launch the frontend application.
+8. Start the backend server: Navigate to the backend directory and use Maven to run the Spring Boot application. use command mvn spring-boot:run.
+9. Open your web browser and access the application: Visit the appropriate URL to view and interact with the application.
 
 ## Contributor
 

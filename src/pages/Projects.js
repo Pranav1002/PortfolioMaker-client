@@ -4,6 +4,7 @@ import { MdAdd, MdClose } from "react-icons/md";
 import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
 import { ReactSession } from "react-client-session";
 import { IconContext } from "react-icons";
+import useAuth from "../components/useAuth";
 
 import ProjectCard from "../components/ProjectCard";
 
@@ -20,10 +21,13 @@ export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [reload, setReload] = useState("new");
 
+  const { getAccessToken } = useAuth();
+
   const [toggleModal, setToggleModal] = useState(true);
 
   useEffect(() => {
     const user = ReactSession.get("user");
+
     if (!user) {
       navigate("/login");
     } else {
@@ -54,12 +58,13 @@ export default function Projects() {
 
     try {
       const apiUrl = "http://localhost:8384/api/projects";
+      const token = await getAccessToken();
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          "Authorization": `Bearer ${user.accessToken}`, // Add the JWT token to the headers
+          "Authorization": `Bearer ${token}`, // Add the JWT token to the headers
         },
         body: JSON.stringify({
           title: title,

@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { ReactSession } from "react-client-session";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../components/useAuth";
 
 export default function Home() {
   const navigate = useNavigate();
   const user = ReactSession.get("user");
+  const { getAccessToken } = useAuth();
+
   const [profile, setProfile] = useState(null);
   const [publicVisibility, setPublicVisibility] = useState(false);
 
   useEffect(() => {
+    
     if (!user) {
       navigate("/login");
       return; // Return early to prevent further execution
@@ -48,15 +52,18 @@ export default function Home() {
     handleUpdate(newProfile);
   };
 
-  const handleUpdate = (newProfile) => {
+  
+  const handleUpdate = async (newProfile) => {
     console.log("Updating profile:", JSON.stringify(newProfile));
+
+    const token = await getAccessToken();
   
     fetch(`http://localhost:8384/api/profiles/update/${user.userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        "Authorization": `Bearer ${user.accessToken}`,
+        "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify(newProfile),
     })

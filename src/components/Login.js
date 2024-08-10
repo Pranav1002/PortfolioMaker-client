@@ -27,6 +27,10 @@ export default function Login() {
         const responseData = await response.json();
         console.log("after login \n Data: ", responseData);
           ReactSession.set("user", responseData);
+          localStorage.setItem("user",responseData);
+          localStorage.setItem("accessToken", responseData.accessToken);
+          localStorage.setItem("refreshToken", responseData.refreshToken);
+          localStorage.setItem("lastFetchTime", new Date().getTime());
          navigate("/");
         // Handle successful login here, e.g., redirect to another page
       } else {

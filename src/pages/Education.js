@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IconContext } from "react-icons";
 import { MdAdd, MdClose } from "react-icons/md";
 import { ReactSession } from "react-client-session";
+import useAuth from "../components/useAuth";
 
 import EducationCard from "../components/EducationCard";
 
@@ -17,6 +18,7 @@ export default function Education() {
   const [educations, setEducations] = useState([]);
   const [reload, setReload] = useState("new");
   const [toggleModal, setToggleModal] = useState(true);
+  const { getAccessToken } = useAuth();
 
   useEffect(() => {
     const user = ReactSession.get("user");
@@ -59,12 +61,14 @@ export default function Education() {
     console.log("in u");
     try {
       const apiUrl = "http://localhost:8384/api/educations";
+
+      const token = await getAccessToken();
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          "Authorization": `Bearer ${user.accessToken}`, // Add the JWT token to the headers
+          "Authorization": `Bearer ${token}`, // Add the JWT token to the headers
         },
         body: JSON.stringify({
           institute: institute,

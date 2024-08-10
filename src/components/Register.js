@@ -22,7 +22,7 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const apiUrl = "http://localhost:8384/api/users/register";
+      const apiUrl = "http://localhost:8384/api/v1/auth/register";
       console.log("Data before email:", email, "and password:", password);
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -39,7 +39,7 @@ export default function Register() {
          navigate("/");
         // Handle successful login here, e.g., redirect to another page
       } else {
-        console.error("Login failed");
+        console.error("Registration failed");
         // Handle failed login here, e.g., show error message to user
       }
     } catch (error) {

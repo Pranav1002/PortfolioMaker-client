@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IconContext } from "react-icons";
 import { MdAdd, MdClose } from "react-icons/md";
 import { ReactSession } from "react-client-session";
+import useAuth from "../components/useAuth";
 
 import ExperienceCard from "../components/ExperienceCard";
 
@@ -19,6 +20,8 @@ export default function Experiences() {
   const [endYear, setEndYear] = useState("");
   const [reload, setReload] = useState("new");
   const [experiences, setExperiences] = useState([]);
+
+  const { getAccessToken } = useAuth();
 
   const [toggleModal, setToggleModal] = useState(true);
 
@@ -65,12 +68,13 @@ export default function Experiences() {
     console.log("in handleSubmit");
     try {
       const apiUrl = "http://localhost:8384/api/experiences";
+      const token = await getAccessToken();
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          "Authorization": `Bearer ${user.accessToken}`, // Add the JWT token to the headers
+          "Authorization": `Bearer ${token}`, // Add the JWT token to the headers
         },
         body: JSON.stringify({
           companyName: companyName,
